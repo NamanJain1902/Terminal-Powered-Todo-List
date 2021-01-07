@@ -13,16 +13,15 @@ class Todo:
         self.kpending = len(self.stack)
         self.kdone = 0
 
-
-    def help(self):
+    @staticmethod
+    def help():
         print("Usage :-")
         print("$ ./todo add \"todo item\"  # Add a new todo")
         print("$ ./todo ls               # Show remaining todos")
         print("$ ./todo del NUMBER       # Delete a todo")
         print("$ ./todo done NUMBER      # Complete a todo")
-        print("$ ./todo help             # Show usage", sep='')
+        print("$ ./todo help             # Show usage")
         print("$ ./todo report           # Statistics", end='')
-
 
     def add(self, todo):
         self.stack.append(todo)
@@ -31,7 +30,6 @@ class Todo:
         # t = (self.stack, self.kpending, self.kdone)
         pickle.dump(self.stack, open("todo.pickle", "wb"))
 
-
     def delete(self, index):
         try:
             y = (int(index)-1)
@@ -39,9 +37,8 @@ class Todo:
             temp = self.stack
             print("Deleted todo #"+index)
             pickle.dump(temp, open("todo.pickle", "wb"))
-        except:
+        except IndexError:
             print("Error: todo #"+index+" does not exist. Nothing deleted.")
-
 
     def list(self):
         if len(self.stack) > 0:
@@ -53,17 +50,16 @@ class Todo:
     def report(self):
         print(self.date.strftime("%Y-%m-%d"), "Pending :", self.kpending, "Completed :", self.kdone)
 
-
     def done(self, index):
         try:
             print("Marked todo #"+index+" as done.")
-            i=1
+            i = 1
             while len(self.stack) > 0:
                 del self.stack[int(i)-1]
-                i+=1
+                i += 1
             self.kdone += 1
             pickle.dump(self.stack, open("todo.pickle", "wb"))
-        except:
+        except IndexError:
             print("Error: todo #"+index+" does not exist.")
 
     def clearall(self):
@@ -71,7 +67,6 @@ class Todo:
         pickle.dump(self.stack, open("todo.pickle", "wb"))
 
 
-        
 if __name__ == '__main__':
 
     obj = Todo()
@@ -87,7 +82,7 @@ if __name__ == '__main__':
                 obj.add(sys.argv[2])
             else:
                 print("Error: Missing todo string. Nothing added!")
-        except:
+        except SyntaxError:
             obj.help()
     elif sys.argv[1] == "del":
         try:
@@ -95,7 +90,7 @@ if __name__ == '__main__':
                 obj.delete(sys.argv[2])
             else:
                 print("Error: Missing NUMBER for deleting todo.")
-        except:
+        except IndexError:
             print("Error: todo #" + sys.argv[2] + " does not exist. Nothing deleted.")
     elif sys.argv[1] == "report":
         obj.report()
@@ -105,8 +100,7 @@ if __name__ == '__main__':
                 obj.done(sys.argv[2])
             else:
                 print("Error: Missing NUMBER for marking todo as done.")
-        except:
+        except IndexError:
             print("Error: todo #"+sys.argv[2]+" does not exist.")
-
     elif sys.argv[1] == "clr":
         obj.clearall()
