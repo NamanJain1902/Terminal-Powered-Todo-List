@@ -4,7 +4,6 @@ import pickle
 
 
 class Todo:
-
     data = {
         "stack": [],
         "kpending": 0,
@@ -14,6 +13,15 @@ class Todo:
     def __init__(self):
         self.date = datetime.datetime.now()
         self.data = pickle.load(open("todo.pickle", "rb"))
+
+    """
+       __            __      ___      __ 
+      / /_____  ____/ /___  / (_)____/ /_
+     / __/ __ \/ __  / __ \/ / / ___/ __/
+    / /_/ /_/ / /_/ / /_/ / / (__  ) /_  
+    \__/\____/\__,_/\____/_/_/____/\__/    
+                                         
+    """
 
     @staticmethod
     def help():
@@ -27,24 +35,24 @@ class Todo:
 
     def add(self, todo):
         self.data['stack'].append(todo)
-        print("Added todo: "'"'+todo+'"')
+        print("Added todo: "'"' + todo + '"')
         self.data['kpending'] += 1
         pickle.dump(self.data, open("todo.pickle", "wb"))
 
     def delete(self, index):
         try:
-            y = (int(index)-1)
+            y = (int(index) - 1)
             del self.data['stack'][y]
             self.data['kpending'] -= 1
-            print("Deleted todo #"+index)
+            print("Deleted todo #" + index)
             pickle.dump(self.data, open("todo.pickle", "wb"))
         except IndexError:
-            print("Error: todo #"+index+" does not exist. Nothing deleted.")
+            print("Error: todo #" + index + " does not exist. Nothing deleted.")
 
     def list(self):
         if len(self.data['stack']) > 0:
             for i, e in reversed(list(enumerate(self.data['stack']))):
-                print('['+str(i+1)+']', e)
+                print('[' + str(i + 1) + ']', e)
         else:
             print("There are no pending todos!")
 
@@ -54,15 +62,15 @@ class Todo:
     def done(self, index):
         try:
             if len(self.data['stack']) > 0:
-                print("Marked todo #"+index+" as done.")
-                del self.data['stack'][int(index)-1]
+                print("Marked todo #" + index + " as done.")
+                del self.data['stack'][int(index) - 1]
                 self.data['kpending'] -= 1
                 self.data['kdone'] += 1
                 pickle.dump(self.data, open("todo.pickle", "wb"))
             else:
                 print("List is empty.")
         except IndexError:
-            print("Error: todo #"+index+" does not exist.")
+            print("Error: todo #" + index + " does not exist.")
 
     def clearall(self):
         self.data['stack'].clear()
@@ -104,7 +112,7 @@ if __name__ == '__main__':
                 else:
                     print("Error: Missing NUMBER for marking todo as done.")
             except IndexError:
-                print("Error: todo #"+sys.argv[2]+" does not exist.")
+                print("Error: todo #" + sys.argv[2] + " does not exist.")
         elif sys.argv[1] == "clr":
             obj.clearall()
     except SyntaxError as err:
